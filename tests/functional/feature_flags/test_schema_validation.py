@@ -263,6 +263,68 @@ def test_valid_condition_all_actions():
     validator.validate()
 
 
+def test_valid_condition_all_actions_falsy_values():
+    schema = {
+        "my_feature": {
+            FEATURE_DEFAULT_VAL_KEY: False,
+            RULES_KEY: {
+                "tenant id is 0 and username is empty and admin is false and groups is empty": {
+                    RULE_MATCH_VALUE: True,
+                    CONDITIONS_KEY: [
+                        {
+                            CONDITION_ACTION: RuleAction.EQUALS.value,
+                            CONDITION_KEY: "tenant_id",
+                            CONDITION_VALUE: 0,
+                        },
+                        {
+                            CONDITION_ACTION: RuleAction.EQUALS.value,
+                            CONDITION_KEY: "username",
+                            CONDITION_VALUE: "",
+                        },
+                        {
+                            CONDITION_ACTION: RuleAction.EQUALS.value,
+                            CONDITION_KEY: "admin",
+                            CONDITION_VALUE: False,
+                        },
+                        {
+                            CONDITION_ACTION: RuleAction.EQUALS.value,
+                            CONDITION_KEY: "groups",
+                            CONDITION_VALUE: [],
+                        },
+                    ],
+                },
+                "tenant id is not 0 and username is not empty and admin is not false and groups is not empty": {
+                    RULE_MATCH_VALUE: True,
+                    CONDITIONS_KEY: [
+                        {
+                            CONDITION_ACTION: RuleAction.NOT_EQUALS.value,
+                            CONDITION_KEY: "tenant_id",
+                            CONDITION_VALUE: 0,
+                        },
+                        {
+                            CONDITION_ACTION: RuleAction.NOT_EQUALS.value,
+                            CONDITION_KEY: "username",
+                            CONDITION_VALUE: "",
+                        },
+                        {
+                            CONDITION_ACTION: RuleAction.NOT_EQUALS.value,
+                            CONDITION_KEY: "admin",
+                            CONDITION_VALUE: False,
+                        },
+                        {
+                            CONDITION_ACTION: RuleAction.NOT_EQUALS.value,
+                            CONDITION_KEY: "groups",
+                            CONDITION_VALUE: [],
+                        },
+                    ],
+                },
+            },
+        }
+    }
+    validator = SchemaValidator(schema)
+    validator.validate()
+
+
 def test_validate_condition_invalid_condition_type():
     # GIVEN an invalid condition type of empty dict
     condition = {}
