@@ -5,12 +5,13 @@ from ... import Logger
 from ...shared.types import JSONType
 from . import schema
 from .base import StoreProvider
-from .exceptions import ConfigurationStoreError
-from .time_conditions import (
+from .comparators import (
     compare_datetime_range,
     compare_days_of_week,
+    compare_modulo_range,
     compare_time_range,
 )
+from .exceptions import ConfigurationStoreError
 
 
 class FeatureFlags:
@@ -62,6 +63,7 @@ class FeatureFlags:
             schema.RuleAction.KEY_NOT_IN_VALUE.value: lambda a, b: a not in b,
             schema.RuleAction.VALUE_IN_KEY.value: lambda a, b: b in a,
             schema.RuleAction.VALUE_NOT_IN_KEY.value: lambda a, b: b not in a,
+            schema.RuleAction.MODULO_RANGE.value: lambda a, b: compare_modulo_range(a, b),
             schema.RuleAction.SCHEDULE_BETWEEN_TIME_RANGE.value: lambda a, b: compare_time_range(a, b),
             schema.RuleAction.SCHEDULE_BETWEEN_DATETIME_RANGE.value: lambda a, b: compare_datetime_range(a, b),
             schema.RuleAction.SCHEDULE_BETWEEN_DAYS_OF_WEEK.value: lambda a, b: compare_days_of_week(a, b),
